@@ -1,0 +1,28 @@
+# The directory where models and summaries will be saved. It is created if it does not exist.
+    model_dir: /mnt/work/onmt-tf/enru_gp_8_gpu/model/enru_gp_8_gpu
+
+    ###############################################################################################
+
+    data:
+      source_words_vocabulary: /mnt/work/onmt-tf/enru_gp_8_gpu/model/enru_gp_8_gpu/export/manual/best/assets/en.bpe
+      target_words_vocabulary: /mnt/work/onmt-tf/enru_gp_8_gpu/model/enru_gp_8_gpu/export/manual/best/assets/ru.bpe
+
+      train_features_file: xxx
+      train_labels_file: xxx
+      eval_features_file: xxx
+      eval_labels_file: xxx
+
+    params:
+      sampling_topk: 10
+      sampling_temperature: 1
+      beam_width: 1
+
+    train:
+      save_checkpoints_steps: 40000 # increased from 15K to 40K by Sati
+      keep_checkpoint_max: 100
+      save_summary_steps: 100    # restored to defauly by sati. Log file too long and writing 12 lines per sec
+      train_steps: 100000000
+
+    eval:
+      eval_delay: 18000  # restored to default by sati. from every 2 to every 5 hours. otherwise 30% of time spent in checkpoint, vs training update
+      external_evaluators: BLEU

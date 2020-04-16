@@ -1,0 +1,32 @@
+# The directory where models and summaries will be saved (Inside the run_dir parent directory).. It is created if it does not exist.
+model_dir: /mnt/work/onmt-tf/mdt/model_enes
+
+###############################################################################################
+
+data:
+  # (required for train_and_eval and train run types).
+  train_features_file: train.en.tok
+  train_labels_file: train.es.tok
+
+  # (required for train_end_eval and eval run types).
+  eval_features_file: valid.en.tok
+  eval_labels_file: valid.es.tok
+
+  # (optional) Models may require additional resource files (e.g. vocabularies).
+  # Use the same BPE as we had for the base models
+  source_words_vocabulary: /mnt/work/onmt-tf/mdt/model_enes/assets/shared.bpe
+  target_words_vocabulary: /mnt/work/onmt-tf/mdt/model_enes/assets/shared.bpe
+
+###############################################################################################
+
+train:
+  save_checkpoints_steps: 1000
+  keep_checkpoint_max: 1000
+  save_summary_steps: 200
+  train_steps: 80000000  # less than ckpt_start + product of two above = 1.54m + 4K*200
+
+eval:
+  eval_delay: 70 #drop vs GP in same ratio as Data itself (90m to 8m)
+  external_evaluators: BLEU
+  exporters: last
+
